@@ -1,7 +1,8 @@
 {
 	"files.associations": {
 		"Doxyfile": "coffeescript",
-		"iostream": "cpp"
+		"iostream": "cpp",
+		"ostream": "cpp"
 	},
 	"code-runner.executorMap": {
 		"javascript": "node",
