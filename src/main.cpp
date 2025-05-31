@@ -561,6 +561,12 @@ void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt, bool NISSearch =
     }
 }
 
+/**
+ * @brief Menambahkan atau menghapus data peserta didik
+ * 
+ * @param optSub pilihan submenu: 1. tambah, 2. hapus
+ */
+
 void tambahHapusPesertaDidik(short optSub)
 {
     TemplateAcc addSiswa;
@@ -693,6 +699,11 @@ void tambahHapusPesertaDidik(short optSub)
         break;
     }
 }
+
+/**
+ * @brief Mengedit data peserta didik berdasarkan NIS
+ * 
+ */
 void editDataPesertaDidik()
 {
     bool statEditLoop = false;
@@ -842,6 +853,13 @@ void editDataPesertaDidik()
 
     } while (statEditLoop == true);
 }
+
+/**
+ * @brief mengajukan permohonan perubahan data peserta didik
+ * 
+ * @param nis NIS peserta diidik yang mengajukan perubahan
+ * @param indexAcc indeks dari peserta didik dalam array dataAcc
+ */
 void ajukanPermohonanPerubahanData(int nis, int indexAcc)
 {
     TemplatePermohonan permohonan;
@@ -858,6 +876,10 @@ void ajukanPermohonanPerubahanData(int nis, int indexAcc)
     cout << ">> Permohonan perubahan berhasil diajukan, harap menunggu maksimal 300 hari kerja\n";
     system("pause");
 }
+
+/**
+ * @brief memproses seluruh permohonan perubahan data yang berstatus "Waiting"
+ */
 void prosesPermohonanData()
 {
     importDataTxt(pathDbDefault, 2);
@@ -1111,6 +1133,13 @@ void login()
     }
 }
 
+/**
+ * @brief fungsi utama program. Menampilkan menu login dan memulai program
+ * 
+ * @param argc Jumlah argumen command-line
+ * @param argv Array argumen command-line
+ * @return int status out program
+ */
 int main(int argc, char const *argv[])
 {
     cout << "Program Manajemen Sekolah" << endl;
