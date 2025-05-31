@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iomanip>
 #include <string>
+#include <limits>
 using namespace std;
 
 struct TemplateAcc
@@ -30,9 +31,8 @@ TemplatePermohonan dataPermohonan[500];
  * @brief 0 untuk path data Acc, 1 untuk data permohonan
  *
  */
-string pathDbDefault[2] = {"../db/dataAcc.txt", "db/dataPermohonan.txt"};
+string pathDbDefault[2] = {"../db/dataAcc.txt", "../db/dataPermohonan.txt"};
 int jumlahAcc = 0, jumlahPermohonan = 0;
-
 // Function Asli
 // Overloading Funct untuk Error Handling Pengguna
 /**
@@ -41,43 +41,42 @@ int jumlahAcc = 0, jumlahPermohonan = 0;
  * @param var variabel untuk meyimpan input string
  * @param lineOr 1 untuk tanpa spasi, 2 untuk input dengan spasi
  */
-void inputHandling(string question, string &var, short lineOr)
+
+void inputHandling(const string &question, string &var, short lineOr)
 {
-    bool statLoop = false;
+    bool statLoop;
     do
     {
+        statLoop = false;
         cout << question;
-        // Jika 1 maka Spasi dianggap kesalahan
         if (lineOr == 1)
         {
             cin >> var;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Bersihkan newline
         }
-        // Jika 2 maka spasi akan dibaca
         else if (lineOr == 2)
         {
-            cin.ignore(30, '\n'); // Mengabaikan Input
+            // Bersihkan sisa newline dari input sebelumnya
+            if (cin.peek() == '\n')
+                cin.ignore(); // <-- ini penting!
             getline(cin, var);
         }
         if (cin.fail())
         {
-            cin.clear();          // Menghapus Semua Fail Flag
-            cin.ignore(30, '\n'); // Mengabaikan Input
-            cout << "\n[ERROR CIN,not str] -" << "Input Tidak Sesuai\n";
+            cin.clear();                                         // Reset error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Buang input error
+            cout << "\n[ERROR CIN, not str] - Input Tidak Sesuai\n";
             statLoop = true;
         }
-        else
-        {
-            statLoop = false;
-        }
-    } while (statLoop == true);
-};
+    } while (statLoop);
+}
 
 /**
  * @brief fungsi overloading untuk menangani input integer
  * @param question pertanyaan yang ditampilkan
  * @param var variabel untuk meyimpan input integer
  */
-void inputHandling(string question, int &var)
+void inputHandling(const string &question, int &var)
 {
     bool statLoop = false;
     do
@@ -86,43 +85,46 @@ void inputHandling(string question, int &var)
         cin >> var;
         if (cin.fail())
         {
-            cin.clear();          // Menghapus Semua Fail Flag
-            cin.ignore(30, '\n'); // Mengabaikan Input
-            cout << "\n[ERROR CIN,not int] -" << "Input Tidak Sesuai\n";
+            cin.clear();                                         // Reset error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Buang sisa input
+            cout << "\n[ERROR CIN, not int] - Input Tidak Sesuai\n";
             statLoop = true;
         }
         else
         {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Buang sisa input setelah angka
             statLoop = false;
         }
-    } while (statLoop == true);
-};
+    } while (statLoop);
+}
 
 /**
  * @brief fungsi overloading untuk menangani input float
  * @param question pertanyaan yang ditampilkan
  * @param var variabel untuk meyimpan input float
  */
-void inputHandling(string question, float &var)
+void inputHandling(const string &question, float &var)
 {
-    cout << question;
     bool statLoop = false;
     do
     {
+        cout << question;
         cin >> var;
         if (cin.fail())
         {
-            cin.clear();          // Menghapus Semua Fail Flag
-            cin.ignore(30, '\n'); // Mengabaikan Input
-            cout << "\n[ERROR CIN,not float] -" << "Input Tidak Sesuai\n";
+            cin.clear();                                         // Reset error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Buang sisa input
+            cout << "\n[ERROR CIN, not float] - Input Tidak Sesuai\n";
             statLoop = true;
         }
         else
         {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Bersihkan sisa karakter
             statLoop = false;
         }
-    } while (statLoop == true);
-};
+
+    } while (statLoop);
+}
 
 // Untuk Short Short
 /**
@@ -130,26 +132,27 @@ void inputHandling(string question, float &var)
  * @param question pertanyaan yang ditampilkan
  * @param var variabel untuk meyimpan input short
  */
-void inputHandling(string question, short &var)
+void inputHandling(const string &question, short &var)
 {
-    cout << question;
     bool statLoop = false;
     do
     {
+        cout << question;
         cin >> var;
         if (cin.fail())
         {
-            cin.clear();          // Menghapus Semua Fail Flag
-            cin.ignore(30, '\n'); // Mengabaikan Input
-            cout << "\n[ERROR CIN,not shortInt] -" << "Input Tidak Sesuai\n";
+            cin.clear();                                         // Reset error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Bersihkan sisa karakter
+            cout << "\n[ERROR CIN, not shortInt] - Input Tidak Sesuai\n";
             statLoop = true;
         }
         else
         {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Bersihkan sisa setelah input valid
             statLoop = false;
         }
-    } while (statLoop == true);
-};
+    } while (statLoop);
+}
 
 // Sorting and Searching Data
 /**
@@ -325,6 +328,35 @@ void importDataTxt(string *pathTxt, short opt)
     case 2:
         // Untuk Import Permohonan pergantian Data
         {
+            string barisData, barisDataIn[5];
+            ifstream openFileTxt(pathTxt[1], ios ::in);
+            if (openFileTxt.is_open())
+            {
+                jumlahPermohonan = 0;
+                while (!openFileTxt.eof())
+                {
+                    getline(openFileTxt, barisData);
+                    if (barisData == "")
+                    {
+                        continue;
+                    }
+                    commaSlicer(barisData, barisDataIn, 5);
+                    dataPermohonan[jumlahPermohonan].NIS = stoi(barisDataIn[0]);
+                    dataPermohonan[jumlahPermohonan].dataLama = barisDataIn[1];
+                    dataPermohonan[jumlahPermohonan].dataBaru = barisData[2];
+                    dataPermohonan[jumlahPermohonan].alasan = barisDataIn[3];
+                    dataPermohonan[jumlahPermohonan].status = barisDataIn[4];
+                    jumlahPermohonan++;
+                }
+                // ini ngebug gasi apa perasaan gw doang
+            }
+            else
+            {
+                cout << "[Err] - Gagal membuka file permohonan\n";
+                system("pause");
+            }
+            openFileTxt.close();
+            break;
         }
         /* Silahkan Bangun codemu disini erlan */
         break;
@@ -402,6 +434,38 @@ void exportData(string *pathDb, short opt)
     /* code */
     case 2:
     {
+        ofstream exportPermohonan(pathDbDefault[1], ios::out | ios::trunc);
+        string barisDataOut;
+        if (exportPermohonan.is_open())
+        {
+            for (int i = 0; i < jumlahPermohonan; i++)
+            {
+                if (dataPermohonan[i].NIS == 0)
+                {
+                    continue; // skip data yang kosong
+                }
+
+                barisDataOut = to_string(dataPermohonan[i].NIS);
+                exportPermohonan << barisDataOut;
+                exportPermohonan << "," << dataPermohonan[i].dataLama;
+                exportPermohonan << "," << dataPermohonan[i].dataBaru;
+                exportPermohonan << "," << dataPermohonan[i].alasan;
+                if (i != jumlahPermohonan - 1)
+                {
+                    exportPermohonan << "," << dataPermohonan[i].status << ";" << endl;
+                }
+                else
+                {
+                    exportPermohonan << "," << dataPermohonan[i].status << ";";
+                }
+            }
+            cout << ">> Permohonan berhasil di export ke file\n";
+        }
+        else
+        {
+            cout << "[Err] - Gagal membuka file export permohonan\n";
+            system("pause");
+        }
         break;
     }
 
@@ -409,8 +473,16 @@ void exportData(string *pathDb, short opt)
         break;
     }
 }
-
-void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt)
+/**
+ * @brief Penampil Data ACC
+ *
+ * @param dataAcc Struct data Acc yang mau ditampilkan
+ * @param jumlahAcc Jumlh Struct Data Acc
+ * @param opt 1 Display All Data Peserta Didik, 2. Display Spesifik Peserta didik
+ * @param NISSearch True untuk nge bypass Search Input Peserta Didik, false untuk Ngeinput Manual
+ * @param NIS2Search NIS yang perlu Dicari
+ */
+void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt, bool NISSearch = false, int NIS2Search = 0)
 {
     switch (opt)
     {
@@ -457,16 +529,43 @@ void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt)
         break;
     }
     case 2:
-        // Erlan tolong yang cari data acc
+    {
+        if (NISSearch == false)
+        {
+            inputHandling("Siapa Yang Mau Kamu Cari?: ", NIS2Search);
+        }
+        int idx = binarySearchRecursive(dataAcc, 0, jumlahAcc - 1, NIS2Search);
+        if (idx == -1)
+        {
+            cout << ">> Data siswa tidak ditemukan\n";
+            return;
+        }
+        cout << "\n=== ==========BIODATA SISWA ================\n";
+        cout << "NISN          : " << dataAcc[idx].NISN << endl;
+        cout << "NIS           : " << dataAcc[idx].NIS << endl;
+        cout << "Nama Lengkap  : " << dataAcc[idx].namaLengkap << endl;
+        cout << "Tanggal Lahir : " << dataAcc[idx].tanggalLahir << endl;
+        cout << "Nama Ayah     : " << dataAcc[idx].namaAyah << endl;
+        cout << "Nama Ibu      : " << dataAcc[idx].namaIbu << endl;
+        cout << "Kelas         : " << dataAcc[idx].kelas << endl;
+        cout << "Tahun Masuk   : " << dataAcc[idx].tahunMasuk << endl;
+        cout << "==============================================\n";
+        system("pause");
         break;
+    }
     case 0:
         // Keluar dari fungsi
         break;
-
     default:
         break;
     }
 }
+
+/**
+ * @brief Menambahkan atau menghapus data peserta didik
+ *
+ * @param optSub pilihan submenu: 1. tambah, 2. hapus
+ */
 
 void tambahHapusPesertaDidik(short optSub)
 {
@@ -600,6 +699,11 @@ void tambahHapusPesertaDidik(short optSub)
         break;
     }
 }
+
+/**
+ * @brief Mengedit data peserta didik berdasarkan NIS
+ *
+ */
 void editDataPesertaDidik()
 {
     bool statEditLoop = false;
@@ -749,13 +853,114 @@ void editDataPesertaDidik()
 
     } while (statEditLoop == true);
 }
+
+/**
+ * @brief mengajukan permohonan perubahan data peserta didik
+ *
+ * @param nis NIS peserta diidik yang mengajukan perubahan
+ * @param indexAcc indeks dari peserta didik dalam array dataAcc
+ */
+void ajukanPermohonanPerubahanData(int nis, int indexAcc)
+{
+    TemplatePermohonan permohonan;
+    importDataTxt(pathDbDefault, 2);
+    system("cls");
+    displayData(dataAcc, jumlahAcc, 2, true, dataAcc[indexAcc].NIS);
+    permohonan.NIS = nis;
+    inputHandling("Masukkan data lama yang ingin diajukan perubahan : ", permohonan.dataLama, 2);
+    inputHandling("Masukkan data baru yang diinginkan : ", permohonan.dataBaru, 2);
+    inputHandling("Alasan perubahan : ", permohonan.alasan, 2);
+    permohonan.status = "Waiting";
+    dataPermohonan[jumlahPermohonan++] = permohonan;
+    exportData(pathDbDefault, 2);
+    cout << ">> Permohonan perubahan berhasil diajukan, harap menunggu maksimal 300 hari kerja\n";
+    system("pause");
+}
+
+/**
+ * @brief memproses seluruh permohonan perubahan data yang berstatus "Waiting"
+ */
+void prosesPermohonanData()
+{
+    importDataTxt(pathDbDefault, 2);
+    for (int i = 0; i < jumlahPermohonan; i++)
+    {
+        if (dataPermohonan[i].status == "Waiting")
+        {
+            system("cls");
+            cout << ">>Permohonan -" << i + 1 << "\n";
+            cout << "NIS : " << dataPermohonan[i].NIS << endl;
+            cout << "Data Lama : " << dataPermohonan[i].dataLama << endl;
+            cout << "Data Baru : " << dataPermohonan[i].dataBaru << endl;
+            cout << "Alsan : " << dataPermohonan[i].alasan << endl;
+
+            short decision;
+            inputHandling("1. Acc\n2. Tolak\nPilihan : ", decision);
+
+            if (decision == 1)
+            {
+                int idx = binarySearchRecursive(dataAcc, 0, jumlahAcc - 1, dataPermohonan[i].NIS);
+                if (idx != -1)
+                {
+                    bool cocok = false;
+                    if (dataAcc[idx].namaLengkap == dataPermohonan[i].dataLama)
+                    {
+                        dataAcc[idx].namaLengkap = dataPermohonan[i].dataBaru;
+                        cocok = true;
+                    }
+                    else if (dataAcc[idx].tanggalLahir == dataPermohonan[i].dataLama)
+                    {
+                        dataAcc[idx].tanggalLahir = dataPermohonan[i].dataBaru;
+                        cocok = true;
+                    }
+                    else if (dataAcc[idx].namaAyah == dataPermohonan[i].dataLama)
+                    {
+                        dataAcc[i].namaAyah = dataPermohonan[i].dataBaru;
+                        cocok = true;
+                    }
+                    else if (dataAcc[idx].namaIbu == dataPermohonan[i].dataLama)
+                    {
+                        dataAcc[idx].namaIbu = dataPermohonan[i].dataBaru;
+                        cocok = true;
+                    }
+                    else if (dataAcc[i].kelas == dataPermohonan[i].dataLama)
+                    {
+                        dataAcc[idx].kelas = dataPermohonan[i].dataBaru;
+                        cocok = true;
+                    }
+                    if (cocok)
+                    {
+                        dataPermohonan[i].status = "Acc";
+                        exportData(pathDbDefault, 1);
+                    }
+                    else
+                    {
+                        cout << "Data lama tidak cocok, perunahan tidak dapat dilakukan\n";
+                    }
+                }
+                else
+                {
+                    cout << ">> NIS tidak ditemukan, permohonan diskip\n";
+                }
+            }
+            else if (decision == 2)
+            {
+                dataPermohonan[i].status = "Rejected";
+            }
+        }
+    }
+    exportData(pathDbDefault, 2);
+    cout << ">> Semua permohonan telah diproses\n";
+    system("pause");
+}
+
 /**
  * @brief Menu yang bersifat looping
  *
  * @param menuAdminStat admin stat yang ada di login
  * @param menuLoginStat login stat yang mengatur perulangan
  */
-void menu(bool &menuAdminStat, bool &menuLoginStat)
+void menu(bool &menuAdminStat, bool &menuLoginStat, int usernameIn, int indexAcc = -1)
 {
     // Menu Admin
     if (menuAdminStat == true)
@@ -817,10 +1022,17 @@ void menu(bool &menuAdminStat, bool &menuLoginStat)
                 editDataPesertaDidik();
                 break;
             }
+            case 4:
+            {
+                prosesPermohonanData();
+                break;
+            }
             case 0:
+            {
                 menuAdminStat = false;
                 menuLoginStat = false;
                 break;
+            }
 
             default:
                 break;
@@ -833,13 +1045,32 @@ void menu(bool &menuAdminStat, bool &menuLoginStat)
         short opt, optSub;
         while (menuLoginStat == true)
         {
+            system("cls");
             cout << ">> Selamat Datang Di Menu Client" << endl;
-            inputHandling(" mau yang mana menunya (exit = 0)", opt);
+            cout << dataAcc[indexAcc].namaLengkap << " (" << dataAcc[indexAcc].NIS << ")" << endl;
+            // inputHandling(" mau yang mana menunya (exit = 0)", opt);
+            inputHandling("1. Lihat Biodata Siswa\n2. Ajukan Perubahan Data\nPilih menu (exit = 0): ", opt);
             cout << "Masuk ke menu orang hutan" << endl;
-            // Code Client Dsini
+            switch (opt)
+            {
+            case 1:
+                displayData(dataAcc, jumlahAcc, 2, true, dataAcc[indexAcc].NIS);
+                break;
+            case 2:
+                ajukanPermohonanPerubahanData(dataAcc[indexAcc].NIS, indexAcc);
+                break;
+            case 0:
+                menuLoginStat = false;
+                break;
+
+            default:
+                cout << "Pilihan tidak valid\n";
+                break;
+            }
         }
     }
 };
+
 /**
  * @brief Menu Login Utama untuk membedakan mana admin dan mana manusia biasa
  *
@@ -865,7 +1096,7 @@ void login()
             adminStat = true;
             loginStat = true;
             importDataTxt(pathDbDefault, 1);
-            menu(adminStat, loginStat);
+            menu(adminStat, loginStat, usernameIn);
         }
         else
         {
@@ -875,45 +1106,45 @@ void login()
             if (indexAcc == -1)
             {
                 cout << "Data Tidak Ditemukan Bolo pindah file atau cari lagi sana" << endl;
+                loginStat = false;
                 system("pause");
             }
             else
             {
-                adminStat = false;
-                loginStat = true;
-                cout << dataAcc[indexAcc].namaLengkap << " [ini bukan?]" << endl;
-                menu(adminStat, loginStat);
+                bool statPassLoop = false;
+                do
+                {
+                    system("cls");
+                    cout << "Hai " << dataAcc[indexAcc].NIS << " !!!" << endl;
+                    inputHandling("Apa Passwordmu? : ", passwordIn, 1);
+                    if (passwordIn != dataAcc[indexAcc].password)
+                    {
+                        statPassLoop = true;
+                    }
+                    else
+                    {
+                        statPassLoop = false;
+                        loginStat = true;
+                        menu(adminStat, loginStat, usernameIn, indexAcc);
+                    }
+                } while (statPassLoop == true);
             }
         }
     }
 }
 
+/**
+ * @brief fungsi utama program. Menampilkan menu login dan memulai program
+ *
+ * @param argc Jumlah argumen command-line
+ * @param argv Array argumen command-line
+ * @return int status out program
+ */
 int main(int argc, char const *argv[])
 {
-    // string coba = "240xxxxx,16870,YuhuJokowi,Joko Wi Dek Tok,11/11/2005,Mulyadi,Ismayarti,IF-D,2018;";
-    // string coba2 = "16870,aku pingin tanggal 2018,2018 jadi hehehe,ya gitu deh males aku,ACC;";
-    // string cobaArr[9];
-
-    // Membuat dummy data pada struct dataAcc
-    // dataAcc[10] = {"1234567890", 10001, "password1", "Budi Santoso", "01/01/2005", "Pak Budi", "Bu Budi", "X-A", 2020};
-    // dataAcc[11] = {"0987654321", 10002, "password2", "Siti Aminah", "02/02/2006", "Pak Siti", "Bu Siti", "XI-B", 2021};
-    // jumlahAcc = 12;
+    cout << "Program Manajemen Sekolah" << endl;
+    cout << "By Erlan and Roi" << endl;
+    system("pause");
     login();
-    // for (int i = 0; i < jumlahAcc; ++i)
-    // {
-    //     cout << "NISN: " << dataAcc[i].NISN << endl;
-    //     cout << "NIS: " << dataAcc[i].NIS << endl;
-    //     cout << "Password: " << dataAcc[i].password << endl;
-    //     cout << "Nama Lengkap: " << dataAcc[i].namaLengkap << endl;
-    //     cout << "Tanggal Lahir: " << dataAcc[i].tanggalLahir << endl;
-    //     cout << "Nama Ayah: " << dataAcc[i].namaAyah << endl;
-    //     cout << "Nama Ibu: " << dataAcc[i].namaIbu << endl;
-    //     cout << "Kelas: " << dataAcc[i].kelas << endl;
-    //     cout << "Tahun Masuk: " << dataAcc[i].tahunMasuk << endl;
-    //     cout << "--------------------------" << endl;
-    // }
-
-    // exportData(pathDbDefault, 1);
-
     return 0;
 }

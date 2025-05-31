@@ -1,6 +1,6 @@
 0056234891,16881,CodingKing,Arif Nugroho,14/05/2006,Hendro,Lestari,IF-A,2019;
 0056234892,16882,MathGenius,Siti Marlina,23/10/2005,Rahmat,Sulistyo,IF-B,2018;
-0056234893,16883,LogicMaster,Bayu Aditya,09/09/2007,Budi,Astuti,IF-C,2020;
+0056234893,16883,LogicMaster,Bayu Aditya,09/09/2007,0,Astuti,IF-C,2020;
 0056234894,16884,TechGirl,Lina Azzahra,01/01/2006,Rizal,Fatmah,IF-D,2019;
 0056234895,16885,AlphaByte,Joko Susilo,25/11/2005,Harun,Rini,IF-E,2018;
 0056234897,16887,BugHunter,Dedi Cahyadi,06/06/2006,Anwar,Santi,IF-A,2019;
