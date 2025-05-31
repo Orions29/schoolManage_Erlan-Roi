@@ -563,7 +563,7 @@ void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt, bool NISSearch =
 
 /**
  * @brief Menambahkan atau menghapus data peserta didik
- * 
+ *
  * @param optSub pilihan submenu: 1. tambah, 2. hapus
  */
 
@@ -702,7 +702,7 @@ void tambahHapusPesertaDidik(short optSub)
 
 /**
  * @brief Mengedit data peserta didik berdasarkan NIS
- * 
+ *
  */
 void editDataPesertaDidik()
 {
@@ -856,7 +856,7 @@ void editDataPesertaDidik()
 
 /**
  * @brief mengajukan permohonan perubahan data peserta didik
- * 
+ *
  * @param nis NIS peserta diidik yang mengajukan perubahan
  * @param indexAcc indeks dari peserta didik dalam array dataAcc
  */
@@ -1135,7 +1135,7 @@ void login()
 
 /**
  * @brief fungsi utama program. Menampilkan menu login dan memulai program
- * 
+ *
  * @param argc Jumlah argumen command-line
  * @param argv Array argumen command-line
  * @return int status out program
