@@ -1,13 +1,15 @@
 {
 	"files.associations": {
-		"Doxyfile": "coffeescript"
+		"Doxyfile": "coffeescript",
+		"iostream": "cpp",
+		"ostream": "cpp"
 	},
 	"code-runner.executorMap": {
 		"javascript": "node",
 		"java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
 		"c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
 		"zig": "zig run",
-		"cpp": "cd $dir && g++ $fileName -o ../build/$fileNameWithoutExt && ../build/$fileNameWithoutExt",
+		"cpp": "cd $dir && g++ $fileName -g -o ../build/$fileNameWithoutExt && ../build/$fileNameWithoutExt",
 		"objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
 		"php": "php",
 		"python": "python -u",
