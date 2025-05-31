@@ -190,6 +190,76 @@ void quickSortDataAcc(TemplateAcc dataAccSort[], int low, int high)
         quickSortDataAcc(dataAccSort, pi + 1, high);
     }
 }
+
+/**
+ * @brief pengurutan array TemplateAcc menggunakan shell sort
+ * 
+ * @param arr Array dari struct TemplateAcc yang ingin diurutkan
+ * @param n Jumlah elemen dalam array
+ * @param mode Mode Pengurutan:
+ *                          - 1. berdasarkan NIS (ascend)
+ *                          - 2. berdasarkan tahun masuk (ascend)
+ */
+void shellSortAcc(TemplateAcc arr[], int n, short mode){
+    // mode = 1. NIS, 2. Tahun Masuk
+    for (int gap = n / 2; gap > 0; gap /= 2)
+    {
+        for (int i = gap; i < n; i++)
+        {
+            TemplateAcc temp = arr[i];
+            int j = i;
+
+            // sorting berdasarkan pilihan
+            if (mode == 1) // berdasarkan NIS
+            {
+                while (j >= gap && arr[j - gap].NIS > temp.NIS)
+                {
+                    arr[j] = arr[j - gap];
+                    j -= gap;
+                }
+                
+            }
+            else if (mode == 2) //berdasarkan tahun masuk
+            {
+                while (j >= gap && arr[j - gap].tahunMasuk > temp.tahunMasuk)
+                {
+                    arr[j] = arr[j - gap];
+                    j -= gap;
+                }
+                
+            }
+            
+            arr[j] = temp;
+            
+        }        
+    }   
+}
+/**
+ * @brief menampilkan data peserta didik setelah disort menggunakan shell sort
+ * 
+ * fungsi ini menyalin data dari array global ke lokal boloo
+ * terus diurutin berdasarkan nis atau tahun masuk boloo
+ */
+void tampilkanDataShellSort(){
+    if (jumlahAcc == 0)
+    {
+        cout << "Data Kosong ngab!\n";
+        return;
+    }
+
+    TemplateAcc tempData[100];           // copy global array
+    for (int i = 0; i < jumlahAcc; i++)
+    {
+        tempData[i] = dataAcc[i];
+    }
+    
+    short pilihanSort;
+    inputHandling("Sort berdasarkan:\n1. NIS\n2. Tahun Masuk\nPilihan: ", pilihanSort);
+
+    shellSortAcc(tempData, jumlahAcc, pilihanSort);
+    displayData(tempData, jumlahAcc, 1);
+    
+}
 /**
  * @brief Fungsi pencarian biner iteratif pada array dataAcc berdasarkan NIS
  *
@@ -478,7 +548,7 @@ void exportData(string *pathDb, short opt)
  *
  * @param dataAcc Struct data Acc yang mau ditampilkan
  * @param jumlahAcc Jumlh Struct Data Acc
- * @param opt 1 Display All Data Peserta Didik, 2. Display Spesifik Peserta didik
+ * @param opt 1 Display All Data Peserta Didik (include sorting), 2. Display Spesifik Peserta didik
  * @param NISSearch True untuk nge bypass Search Input Peserta Didik, false untuk Ngeinput Manual
  * @param NIS2Search NIS yang perlu Dicari
  */
@@ -489,6 +559,18 @@ void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt, bool NISSearch =
     case 1:
     {
         system("cls");
+        short sortOpt;
+        inputHandling("Tampilkan dengan urutan berdasarkan:\n1. NIS\n2. Tahun Masuk\nPilihan (1/2) : ", sortOpt);
+        
+        TemplateAcc tempData[100];      // copy ke array local
+        for (int i = 0; i < jumlahAcc; i++)
+        {
+            tempData[i] = dataAcc[i];
+        }
+
+        shellSortAcc(tempData, jumlahAcc, sortOpt);
+        
+        //system("cls");
         cout << "Display Data All Peserta Didik" << endl;
         // Header Bolo
         cout << left
