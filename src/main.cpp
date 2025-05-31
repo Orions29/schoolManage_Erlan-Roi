@@ -561,6 +561,12 @@ void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt, bool NISSearch =
     }
 }
 
+/**
+ * @brief Menambahkan atau menghapus data peserta didik
+ *
+ * @param optSub pilihan submenu: 1. tambah, 2. hapus
+ */
+
 void tambahHapusPesertaDidik(short optSub)
 {
     TemplateAcc addSiswa;
@@ -693,6 +699,11 @@ void tambahHapusPesertaDidik(short optSub)
         break;
     }
 }
+
+/**
+ * @brief Mengedit data peserta didik berdasarkan NIS
+ *
+ */
 void editDataPesertaDidik()
 {
     bool statEditLoop = false;
@@ -842,6 +853,13 @@ void editDataPesertaDidik()
 
     } while (statEditLoop == true);
 }
+
+/**
+ * @brief mengajukan permohonan perubahan data peserta didik
+ *
+ * @param nis NIS peserta diidik yang mengajukan perubahan
+ * @param indexAcc indeks dari peserta didik dalam array dataAcc
+ */
 void ajukanPermohonanPerubahanData(int nis, int indexAcc)
 {
     TemplatePermohonan permohonan;
@@ -858,6 +876,10 @@ void ajukanPermohonanPerubahanData(int nis, int indexAcc)
     cout << ">> Permohonan perubahan berhasil diajukan, harap menunggu maksimal 300 hari kerja\n";
     system("pause");
 }
+
+/**
+ * @brief memproses seluruh permohonan perubahan data yang berstatus "Waiting"
+ */
 void prosesPermohonanData()
 {
     importDataTxt(pathDbDefault, 2);
@@ -1101,7 +1123,6 @@ void login()
                     }
                     else
                     {
-                        // cout << dataAcc[indexAcc].namaLengkap << " [ini bukan?]" << endl;
                         statPassLoop = false;
                         loginStat = true;
                         menu(adminStat, loginStat, usernameIn, indexAcc);
@@ -1112,35 +1133,18 @@ void login()
     }
 }
 
+/**
+ * @brief fungsi utama program. Menampilkan menu login dan memulai program
+ *
+ * @param argc Jumlah argumen command-line
+ * @param argv Array argumen command-line
+ * @return int status out program
+ */
 int main(int argc, char const *argv[])
 {
     cout << "Program Manajemen Sekolah" << endl;
     cout << "By Erlan and Roi" << endl;
     system("pause");
-    // string coba = "240xxxxx,16870,YuhuJokowi,Joko Wi Dek Tok,11/11/2005,Mulyadi,Ismayarti,IF-D,2018;";
-    // string coba2 = "16870,aku pingin tanggal 2018,2018 jadi hehehe,ya gitu deh males aku,ACC;";
-    // string cobaArr[9];
-
-    // Membuat dummy data pada struct dataAcc
-    // dataAcc[10] = {"1234567890", 10001, "password1", "Budi Santoso", "01/01/2005", "Pak Budi", "Bu Budi", "X-A", 2020};
-    // dataAcc[11] = {"0987654321", 10002, "password2", "Siti Aminah", "02/02/2006", "Pak Siti", "Bu Siti", "XI-B", 2021};
-    // jumlahAcc = 12;
     login();
-    // for (int i = 0; i < jumlahAcc; ++i)
-    // {
-    //     cout << "NISN: " << dataAcc[i].NISN << endl;
-    //     cout << "NIS: " << dataAcc[i].NIS << endl;
-    //     cout << "Password: " << dataAcc[i].password << endl;
-    //     cout << "Nama Lengkap: " << dataAcc[i].namaLengkap << endl;
-    //     cout << "Tanggal Lahir: " << dataAcc[i].tanggalLahir << endl;
-    //     cout << "Nama Ayah: " << dataAcc[i].namaAyah << endl;
-    //     cout << "Nama Ibu: " << dataAcc[i].namaIbu << endl;
-    //     cout << "Kelas: " << dataAcc[i].kelas << endl;
-    //     cout << "Tahun Masuk: " << dataAcc[i].tahunMasuk << endl;
-    //     cout << "--------------------------" << endl;
-    // }
-
-    // exportData(pathDbDefault, 1);
-
     return 0;
 }
