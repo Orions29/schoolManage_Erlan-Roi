@@ -193,15 +193,16 @@ void quickSortDataAcc(TemplateAcc dataAccSort[], int low, int high)
 
 /**
  * @brief pengurutan array TemplateAcc menggunakan shell sort
- * 
+ *
  * @param arr Array dari struct TemplateAcc yang ingin diurutkan
  * @param n Jumlah elemen dalam array
  * @param mode Mode Pengurutan:
  *                          - 1. berdasarkan NIS (ascend)
  *                          - 2. berdasarkan tahun masuk (ascend)
  */
-void shellSortAcc(TemplateAcc arr[], int n, short mode){
-    
+void shellSortAcc(TemplateAcc arr[], int n, short mode)
+{
+
     for (int gap = n / 2; gap > 0; gap /= 2)
     {
         for (int i = gap; i < n; i++)
@@ -218,10 +219,7 @@ void shellSortAcc(TemplateAcc arr[], int n, short mode){
             arr[j] = temp;
         }
     }
-    
-      
 }
-
 
 /**
  * @brief Fungsi pencarian biner iteratif pada array dataAcc berdasarkan NIS
@@ -276,12 +274,6 @@ void commaSlicer(string barisData, string *barisDataOut, int kolomData)
         }
     }
     posisiKoma[idx] = idxComa; // agar tau posisi akhir ; nya
-
-    // for (int i = 0; i < kolomData; i++)
-    // {
-    //     cout << posisiKoma[i] << ',';
-    // }
-    // cout << endl;
 
     // Memotong string per koma
     for (int i = 0; i < idx; i++)
@@ -376,7 +368,7 @@ void importDataTxt(string *pathTxt, short opt)
                     commaSlicer(barisData, barisDataIn, 5);
                     dataPermohonan[jumlahPermohonan].NIS = stoi(barisDataIn[0]);
                     dataPermohonan[jumlahPermohonan].dataLama = barisDataIn[1];
-                    dataPermohonan[jumlahPermohonan].dataBaru = barisData[2];
+                    dataPermohonan[jumlahPermohonan].dataBaru = barisDataIn[2];
                     dataPermohonan[jumlahPermohonan].alasan = barisDataIn[3];
                     dataPermohonan[jumlahPermohonan].status = barisDataIn[4];
                     jumlahPermohonan++;
@@ -492,7 +484,6 @@ void exportData(string *pathDb, short opt)
                     exportPermohonan << "," << dataPermohonan[i].status << ";";
                 }
             }
-            cout << ">> Permohonan berhasil di export ke file\n";
         }
         else
         {
@@ -524,8 +515,8 @@ void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt, bool NISSearch =
         // system("cls");
         // short sortOpt;
         // inputHandling("Tampilkan dengan urutan berdasarkan:\n1. NIS\n2. Tahun Masuk\nPilihan (1/2) : ", sortOpt);
-        
-        TemplateAcc tempData[100];      // copy ke array local
+
+        TemplateAcc tempData[100]; // copy ke array local
         for (int i = 0; i < jumlahAcc; i++)
         {
             tempData[i] = dataAcc[i];
@@ -535,8 +526,8 @@ void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt, bool NISSearch =
         inputHandling("Tampilkan dengan urutan berdasarkan:\n1. NIS\n2. Tahun Masuk\nPilihan (1/2) : ", sortOpt);
 
         shellSortAcc(tempData, jumlahAcc, sortOpt);
-        
-        //system("cls");
+
+        // system("cls");
         cout << "Display Data All Peserta Didik" << endl;
         // Header Bolo
         cout << left
@@ -559,13 +550,13 @@ void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt, bool NISSearch =
         {
             cout << left
                  << setw(12) << tempData[i].NISN
-                 << setw(8)  << tempData[i].NIS
+                 << setw(8) << tempData[i].NIS
                  << setw(15) << tempData[i].password
                  << setw(20) << tempData[i].namaLengkap
                  << setw(14) << tempData[i].tanggalLahir
                  << setw(20) << tempData[i].namaAyah
                  << setw(20) << tempData[i].namaIbu
-                 << setw(8)  << tempData[i].kelas
+                 << setw(8) << tempData[i].kelas
                  << setw(12) << tempData[i].tahunMasuk
                  << endl;
         }
@@ -611,30 +602,30 @@ void displayData(TemplateAcc dataAcc[], int jumlahAcc, int opt, bool NISSearch =
 
 /**
  * @brief menampilkan data peserta didik setelah disort menggunakan shell sort
- * 
+ *
  * fungsi ini menyalin data dari array global ke lokal boloo
  * terus diurutin berdasarkan nis atau tahun masuk boloo
  */
 
-void tampilkanDataShellSort(){
+void tampilkanDataShellSort()
+{
     if (jumlahAcc == 0)
     {
         cout << "Data Kosong ngab!\n";
         return;
     }
 
-    TemplateAcc tempData[100];           // copy global array
+    TemplateAcc tempData[100]; // copy global array
     for (int i = 0; i < jumlahAcc; i++)
     {
         tempData[i] = dataAcc[i];
     }
-    
+
     short pilihanSort;
     inputHandling("Sort berdasarkan:\n1. NIS\n2. Tahun Masuk\nPilihan: ", pilihanSort);
 
     shellSortAcc(tempData, jumlahAcc, pilihanSort);
     displayData(tempData, jumlahAcc, 1);
-    
 }
 
 /**
@@ -965,10 +956,10 @@ void prosesPermohonanData()
         {
             system("cls");
             cout << ">>Permohonan -" << i + 1 << "\n";
-            cout << "NIS : " << dataPermohonan[i].NIS << endl;
-            cout << "Data Lama : " << dataPermohonan[i].dataLama << endl;
-            cout << "Data Baru : " << dataPermohonan[i].dataBaru << endl;
-            cout << "Alsan : " << dataPermohonan[i].alasan << endl;
+            cout << "NIS        : " << dataPermohonan[i].NIS << endl;
+            cout << "Data Lama  : " << dataPermohonan[i].dataLama << endl;
+            cout << "Data Baru  : " << dataPermohonan[i].dataBaru << endl;
+            cout << "Alsan      : " << dataPermohonan[i].alasan << endl;
 
             short decision;
             inputHandling("1. Acc\n2. Tolak\nPilihan : ", decision);
@@ -991,7 +982,7 @@ void prosesPermohonanData()
                     }
                     else if (dataAcc[idx].namaAyah == dataPermohonan[i].dataLama)
                     {
-                        dataAcc[i].namaAyah = dataPermohonan[i].dataBaru;
+                        dataAcc[idx].namaAyah = dataPermohonan[i].dataBaru;
                         cocok = true;
                     }
                     else if (dataAcc[idx].namaIbu == dataPermohonan[i].dataLama)
@@ -999,7 +990,7 @@ void prosesPermohonanData()
                         dataAcc[idx].namaIbu = dataPermohonan[i].dataBaru;
                         cocok = true;
                     }
-                    else if (dataAcc[i].kelas == dataPermohonan[i].dataLama)
+                    else if (dataAcc[idx].kelas == dataPermohonan[i].dataLama)
                     {
                         dataAcc[idx].kelas = dataPermohonan[i].dataBaru;
                         cocok = true;
@@ -1012,11 +1003,13 @@ void prosesPermohonanData()
                     else
                     {
                         cout << "Data lama tidak cocok, perunahan tidak dapat dilakukan\n";
+                        system("pause");
                     }
                 }
                 else
                 {
                     cout << ">> NIS tidak ditemukan, permohonan diskip\n";
+                    system("pause");
                 }
             }
             else if (decision == 2)
@@ -1024,8 +1017,10 @@ void prosesPermohonanData()
                 dataPermohonan[i].status = "Rejected";
             }
         }
+        exportData(pathDbDefault, 2);
+        importDataTxt(pathDbDefault, 2);
     }
-    exportData(pathDbDefault, 2);
+
     cout << ">> Semua permohonan telah diproses\n";
     system("pause");
 }
