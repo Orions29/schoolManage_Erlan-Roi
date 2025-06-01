@@ -688,7 +688,7 @@ void tambahHapusPesertaDidik(short optSub)
             int left = 0, right = jumlahAcc - 1;
             cout << ">> Menu Hapus Peserta Didik" << endl;
             cout << "-----------------" << endl;
-            inputHandling("Berapa NIM nya? (exit = 0): ", nisDel);
+            inputHandling("Berapa NIS nya? (exit = 0): ", nisDel);
             if (nisDel == 0)
             {
                 optSubSub = 0;
@@ -782,7 +782,7 @@ void editDataPesertaDidik()
         int left = 0, right = jumlahAcc - 1;
         cout << ">> Menu Edit Peserta Didik" << endl;
         cout << "-----------------" << endl;
-        inputHandling("Berapa NIM nya? (exit = 0): ", nisEdit);
+        inputHandling("Berapa NIS nya? (exit = 0): ", nisEdit);
         if (nisEdit == 0)
         {
             optSubSub = 0;
