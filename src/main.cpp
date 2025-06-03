@@ -695,7 +695,6 @@ void tambahHapusPesertaDidik(short optSub)
             }
             else
             {
-
                 indexAcc = binarySearchRecursive(dataAcc, left, right, nisDel);
                 if (indexAcc > -1)
                 {
@@ -719,42 +718,42 @@ void tambahHapusPesertaDidik(short optSub)
                     optSubSub = 2;
                     system("pause");
                 }
-                switch (optSubSub)
-                {
-                case 1:
-                {
-                    dataAcc[indexAcc].NISN = "";
-                    dataAcc[indexAcc].NIS = 0;
-                    dataAcc[indexAcc].password = "";
-                    dataAcc[indexAcc].namaLengkap = "";
-                    dataAcc[indexAcc].tanggalLahir = "";
-                    dataAcc[indexAcc].namaAyah = "";
-                    dataAcc[indexAcc].namaIbu = "";
-                    dataAcc[indexAcc].kelas = "";
-                    dataAcc[indexAcc].tahunMasuk = 0;
-                    cout << "Peserta didik berhasil Dihapus!" << endl;
-                    statDelLoop = false;
-                    jumlahAcc--;
-                    exportData(pathDbDefault, 1);
-                    system("pause");
-                    system("cls");
-                    break;
-                }
-                case 2:
-                {
-                    statDelLoop = true;
-                    break;
-                }
-                case 0:
-                {
-                    statDelLoop = false;
-                    break;
-                }
-                default:
-                    cout << "Ngomong opo toh" << endl;
-                    statDelLoop = true;
-                    break;
-                }
+            }
+            switch (optSubSub)
+            {
+            case 1:
+            {
+                dataAcc[indexAcc].NISN = "";
+                dataAcc[indexAcc].NIS = 0;
+                dataAcc[indexAcc].password = "";
+                dataAcc[indexAcc].namaLengkap = "";
+                dataAcc[indexAcc].tanggalLahir = "";
+                dataAcc[indexAcc].namaAyah = "";
+                dataAcc[indexAcc].namaIbu = "";
+                dataAcc[indexAcc].kelas = "";
+                dataAcc[indexAcc].tahunMasuk = 0;
+                cout << "Peserta didik berhasil Dihapus!" << endl;
+                statDelLoop = false;
+                jumlahAcc--;
+                exportData(pathDbDefault, 1);
+                system("pause");
+                system("cls");
+                break;
+            }
+            case 2:
+            {
+                statDelLoop = true;
+                break;
+            }
+            case 0:
+            {
+                statDelLoop = false;
+                break;
+            }
+            default:
+                cout << "Ngomong opo toh" << endl;
+                statDelLoop = true;
+                break;
             }
         } while (statDelLoop == true);
         break;
